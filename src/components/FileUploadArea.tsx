@@ -77,10 +77,10 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           className={cn(
-            "flex flex-col items-center justify-center h-[200px] border-2 border-dashed rounded-md cursor-pointer transition-colors",
+            "flex flex-col items-center justify-center h-[150px] border-2 border-dashed rounded-md cursor-pointer transition-colors",
             isDragging
-              ? "border-[#9b87f5] bg-[#f0ebfc]"
-              : "border-[#e2dcf8] hover:border-[#9b87f5] hover:bg-[#f8f6fe]"
+              ? "border-[#AF93C8] bg-[#F8F6FE]"
+              : "border-[#E2DCF8] hover:border-[#AF93C8] hover:bg-[#F8F6FE]"
           )}
         >
           <input
@@ -91,34 +91,34 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
           />
           <div className="flex flex-col items-center">
             {icon}
-            <p className="mt-2 text-[#3a2963] font-medium">{uploadText}</p>
-            <p className="mt-1 text-sm text-[#6e59a5]">{acceptedTypesText}</p>
+            <p className="mt-2 text-[#3F2A51] font-medium">{uploadText}</p>
+            <p className="mt-1 text-sm text-[#AF93C8]">{acceptedTypesText}</p>
           </div>
         </label>
       ) : (
-        <div className="flex flex-col bg-[#f0ebfc] rounded-md p-4 h-[200px]">
+        <div className="flex flex-col bg-[#F8F6FE] rounded-md p-4 h-[150px]">
           <div className="flex items-start justify-between">
             <div className="flex items-center">
-              <File className="h-8 w-8 text-[#9b87f5] mr-3" />
+              <File className="h-8 w-8 text-[#AF93C8] mr-3" />
               <div>
-                <p className="font-medium text-[#3a2963] truncate max-w-[200px]">
+                <p className="font-medium text-[#3F2A51] truncate max-w-[200px]">
                   {file.name}
                 </p>
-                <p className="text-sm text-[#6e59a5]">
+                <p className="text-sm text-[#AF93C8]">
                   {formatFileSize(file.size)}
                 </p>
               </div>
             </div>
             <button
               onClick={onRemoveFile}
-              className="p-1.5 bg-white rounded-full hover:bg-[#e2dcf8] transition-colors"
+              className="p-1.5 bg-white rounded-full hover:bg-[#F8F6FE] transition-colors"
               aria-label="Remove file"
             >
-              <X className="h-5 w-5 text-[#6e59a5]" />
+              <X className="h-5 w-5 text-[#AF93C8]" />
             </button>
           </div>
           <div className="flex-grow flex items-center justify-center">
-            <p className="text-[#6e59a5] text-sm">File ready for processing</p>
+            <p className="text-[#AF93C8] text-sm">File ready for processing</p>
           </div>
         </div>
       )}
