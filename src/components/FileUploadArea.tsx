@@ -11,6 +11,7 @@ interface FileUploadAreaProps {
   uploadText: string;
   acceptedTypesText: string;
   icon: React.ReactNode;
+  height?: string;
 }
 
 const FileUploadArea: React.FC<FileUploadAreaProps> = ({
@@ -21,6 +22,7 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
   uploadText,
   acceptedTypesText,
   icon,
+  height = "h-[150px]",
 }) => {
   const [isDragging, setIsDragging] = useState(false);
 
@@ -77,7 +79,7 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           className={cn(
-            "flex flex-col items-center justify-center h-[150px] border-2 border-dashed rounded-md cursor-pointer transition-colors",
+            `flex flex-col items-center justify-center ${height} border-2 border-dashed rounded-md cursor-pointer transition-colors`,
             isDragging
               ? "border-[#AF93C8] bg-[#F8F6FE]"
               : "border-[#E2DCF8] hover:border-[#AF93C8] hover:bg-[#F8F6FE]"
@@ -96,7 +98,7 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
           </div>
         </label>
       ) : (
-        <div className="flex flex-col bg-[#F8F6FE] rounded-md p-4 h-[150px]">
+        <div className={`flex flex-col bg-[#F8F6FE] rounded-md p-4 ${height}`}>
           <div className="flex items-start justify-between">
             <div className="flex items-center">
               <File className="h-8 w-8 text-[#AF93C8] mr-3" />

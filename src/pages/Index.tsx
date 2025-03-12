@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -76,6 +77,7 @@ const Index = () => {
                 uploadText="Drag and drop your CV file"
                 acceptedTypesText="Accepted file types: DOCX, TXT"
                 icon={<Upload className="h-12 w-12 text-[#AF93C8]" />}
+                height="h-[350px]"
               />
             </CardContent>
           </Card>
