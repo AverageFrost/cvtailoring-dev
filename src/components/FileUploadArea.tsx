@@ -13,6 +13,7 @@ interface FileUploadAreaProps {
   acceptedTypesText: string;
   icon: React.ReactNode;
   height?: string;
+  isProcessing?: boolean;
 }
 
 const FileUploadArea: React.FC<FileUploadAreaProps> = ({
@@ -24,6 +25,7 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
   acceptedTypesText,
   icon,
   height = "h-[150px]",
+  isProcessing = false,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const { toast } = useToast();
@@ -127,13 +129,16 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
                 </p>
               </div>
             </div>
-            <button
-              onClick={onRemoveFile}
-              className="p-1.5 bg-white rounded-full hover:bg-[#F8F6FE] transition-colors"
-              aria-label="Remove file"
-            >
-              <X className="h-5 w-5 text-[#AF93C8]" />
-            </button>
+            {!isProcessing && (
+              <button
+                onClick={onRemoveFile}
+                className="p-1.5 bg-white rounded-full hover:bg-[#F8F6FE] transition-colors"
+                aria-label="Remove file"
+                disabled={isProcessing}
+              >
+                <X className="h-5 w-5 text-[#AF93C8]" />
+              </button>
+            )}
           </div>
           <div className="flex-grow flex items-center justify-center">
             <p className="text-[#AF93C8] text-sm">File ready for processing</p>

@@ -54,17 +54,21 @@ const Index = () => {
   };
 
   const handleRemoveCv = () => {
-    setCvFile({ file: null });
+    if (!isProcessing) {
+      setCvFile({ file: null });
+    }
   };
 
   const handleRemoveJobFile = () => {
-    if (jobDescription.file) {
-      setJobDescription({ file: null, content: jobDescription.content });
+    if (!isProcessing) {
+      setJobDescription({ file: null, content: "" });
     }
   };
 
   const handleClearJobText = () => {
-    setJobDescription({ file: null, content: "" });
+    if (!isProcessing) {
+      setJobDescription({ file: null, content: "" });
+    }
   };
 
   const handleTailorCv = () => {
@@ -140,6 +144,7 @@ const Index = () => {
                 acceptedTypesText="Accepted file types: DOCX, TXT"
                 icon={<Upload className="h-12 w-12 text-[#AF93C8]" />}
                 height="h-[350px]"
+                isProcessing={isProcessing}
               />
             </CardContent>
           </Card>
@@ -149,38 +154,54 @@ const Index = () => {
               <CardTitle className="text-[#3F2A51]">Upload Job Description</CardTitle>
             </CardHeader>
             <CardContent>
-              <FileUploadArea 
-                onFileUpload={handleJobFileUpload}
-                onRemoveFile={handleRemoveJobFile}
-                file={jobDescription.file}
-                acceptedTypes=".docx,.txt"
-                uploadText="Drag and drop a job description file"
-                acceptedTypesText="Accepted file types: DOCX, TXT"
-                icon={<Upload className="h-12 w-12 text-[#AF93C8]" />}
-              />
-              
-              <div className="mt-4">
-                <p className="text-[#AF93C8] mb-2">Or paste text directly:</p>
-                <div className="relative">
-                  <Textarea 
-                    placeholder="Paste job description here..."
-                    className="min-h-[150px] border-[#E2DCF8] focus-visible:ring-[#AF93C8]"
-                    value={jobDescription.content || ""}
-                    onChange={handleJobTextChange}
-                    disabled={isProcessing}
+              {jobDescription.file ? (
+                <FileUploadArea 
+                  onFileUpload={handleJobFileUpload}
+                  onRemoveFile={handleRemoveJobFile}
+                  file={jobDescription.file}
+                  acceptedTypes=".docx,.txt"
+                  uploadText="Drag and drop a job description file"
+                  acceptedTypesText="Accepted file types: DOCX, TXT"
+                  icon={<Upload className="h-12 w-12 text-[#AF93C8]" />}
+                  height="h-[350px]"
+                  isProcessing={isProcessing}
+                />
+              ) : (
+                <>
+                  <FileUploadArea 
+                    onFileUpload={handleJobFileUpload}
+                    onRemoveFile={handleRemoveJobFile}
+                    file={jobDescription.file}
+                    acceptedTypes=".docx,.txt"
+                    uploadText="Drag and drop a job description file"
+                    acceptedTypesText="Accepted file types: DOCX, TXT"
+                    icon={<Upload className="h-12 w-12 text-[#AF93C8]" />}
                   />
-                  {jobDescription.content && (
-                    <button
-                      onClick={handleClearJobText}
-                      className="absolute right-2 top-2 p-1 rounded-full bg-[#F8F6FE] hover:bg-[#E2DCF8] transition-colors"
-                      aria-label="Clear text"
-                      disabled={isProcessing}
-                    >
-                      <X className="h-4 w-4 text-[#AF93C8]" />
-                    </button>
-                  )}
-                </div>
-              </div>
+                  
+                  <div className="mt-4">
+                    <p className="text-[#AF93C8] mb-2">Or paste text directly:</p>
+                    <div className="relative">
+                      <Textarea 
+                        placeholder="Paste job description here..."
+                        className="min-h-[150px] border-[#E2DCF8] focus-visible:ring-[#AF93C8]"
+                        value={jobDescription.content || ""}
+                        onChange={handleJobTextChange}
+                        disabled={isProcessing}
+                      />
+                      {jobDescription.content && (
+                        <button
+                          onClick={handleClearJobText}
+                          className="absolute right-2 top-2 p-1 rounded-full bg-[#F8F6FE] hover:bg-[#E2DCF8] transition-colors"
+                          aria-label="Clear text"
+                          disabled={isProcessing}
+                        >
+                          <X className="h-4 w-4 text-[#AF93C8]" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
