@@ -2,6 +2,7 @@
 import React, { useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
 import { File, X } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface FileUploadAreaProps {
   onFileUpload: (file: File) => void;
@@ -25,6 +26,7 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
   height = "h-[150px]",
 }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const { toast } = useToast();
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -48,21 +50,35 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
         if (acceptedTypes.includes(fileExtension)) {
           onFileUpload(file);
         } else {
-          console.error("Invalid file type");
-          // In a real app, you'd show an error toast here
+          toast({
+            title: "Invalid file type",
+            description: `Please upload a file with ${acceptedTypesText.toLowerCase()}`,
+            variant: "destructive",
+          });
         }
       }
     },
-    [acceptedTypes, onFileUpload]
+    [acceptedTypes, acceptedTypesText, onFileUpload, toast]
   );
 
   const handleFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.files && e.target.files.length > 0) {
-        onFileUpload(e.target.files[0]);
+        const file = e.target.files[0];
+        const fileExtension = `.${file.name.split(".").pop()}`.toLowerCase();
+        
+        if (acceptedTypes.includes(fileExtension)) {
+          onFileUpload(file);
+        } else {
+          toast({
+            title: "Invalid file type",
+            description: `Please upload a file with ${acceptedTypesText.toLowerCase()}`,
+            variant: "destructive",
+          });
+        }
       }
     },
-    [onFileUpload]
+    [acceptedTypes, acceptedTypesText, onFileUpload, toast]
   );
 
   const formatFileSize = (bytes: number): string => {
