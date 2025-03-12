@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowRight, Upload, X, Loader } from "lucide-react";
 import FileUploadArea from "@/components/FileUploadArea";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface FileData {
   file: File | null;
@@ -18,9 +18,9 @@ const Index = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [remainingTime, setRemainingTime] = useState(29);
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const handleCvUpload = (file: File) => {
-    // Check if file is in accepted format
     const fileExtension = `.${file.name.split(".").pop()}`.toLowerCase();
     if (![".docx", ".txt"].includes(fileExtension)) {
       toast({
@@ -35,7 +35,6 @@ const Index = () => {
   };
 
   const handleJobFileUpload = (file: File) => {
-    // Check if file is in accepted format
     const fileExtension = `.${file.name.split(".").pop()}`.toLowerCase();
     if (![".docx", ".txt"].includes(fileExtension)) {
       toast({
@@ -93,15 +92,14 @@ const Index = () => {
       return;
     }
     
-    // Start processing
     setIsProcessing(true);
     
-    // Simulate countdown timer
     const timer = setInterval(() => {
       setRemainingTime((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
           setIsProcessing(false);
+          navigate("/results");
           return 29;
         }
         return prev - 1;
