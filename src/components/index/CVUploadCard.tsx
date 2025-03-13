@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Upload, Loader } from "lucide-react";
@@ -37,7 +38,7 @@ const CVUploadCard: React.FC<CVUploadCardProps> = ({
           height="h-[350px]"
           isProcessing={isProcessing}
           isUploading={isUploading}
-          isExistingFile={isExistingFile}
+          isExistingFile={Boolean(isExistingFile)}
         />
       </CardContent>
     </Card>
