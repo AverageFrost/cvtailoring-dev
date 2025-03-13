@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -109,7 +108,7 @@ const Results = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F6FE] flex flex-col items-center px-4 py-8">
+    <div className="min-h-screen bg-[#F8F6FE] flex flex-col items-center px-4 py-4">
       <style dangerouslySetInnerHTML={{
         __html: `
           /* Custom scrollbar styles - only visible on scroll/hover */
@@ -158,13 +157,11 @@ const Results = () => {
       }} />
       <div className="w-full max-w-6xl">
         {showBanner && (
-          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-8 rounded flex items-start justify-between">
+          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 py-2 px-4 mb-4 rounded flex items-start justify-between">
             <div className="flex items-start">
               <span className="flex-shrink-0 mr-2">✓</span>
-              <p>
-                <span className="font-bold">Success!</span>
-                <br />
-                Your CV has been tailored to match the job description. You can now copy it into your own CV format for editing or start over.
+              <p className="text-sm">
+                <span className="font-bold">Success!</span> Your CV has been tailored to match the job description. You can now copy it into your own CV format for editing or start over.
               </p>
             </div>
             <button 
@@ -177,7 +174,7 @@ const Results = () => {
           </div>
         )}
         
-        <div className="mb-8 flex items-center">
+        <div className="mb-4 flex items-center">
           <Button 
             onClick={handleGoBack} 
             variant="ghost" 
@@ -186,35 +183,36 @@ const Results = () => {
             <ArrowLeft className="h-5 w-5 mr-2" />
             Back
           </Button>
-          <h1 className="text-4xl font-bold text-[#3F2A51]">Your Tailored CV</h1>
+          <h1 className="text-3xl font-bold text-[#3F2A51]">Your Tailored CV</h1>
         </div>
 
         {/* Main content - job description and tailored CV side by side */}
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
           <Card className="border-[#E2DCF8] shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-[#3F2A51]">Job Description</CardTitle>
+            <CardHeader className="py-3 px-4">
+              <CardTitle className="text-[#3F2A51] text-xl">Job Description</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="bg-white p-4 rounded-md h-[500px] overflow-y-auto whitespace-pre-line text-left text-sm content-panel">
+            <CardContent className="pt-0 px-4 pb-4">
+              <div className="bg-white p-3 rounded-md h-[520px] overflow-y-auto whitespace-pre-line text-left text-sm content-panel">
                 {mockJobDescription}
               </div>
             </CardContent>
           </Card>
 
           <Card className="border-[#E2DCF8] shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-[#3F2A51]">Tailored CV</CardTitle>
+            <CardHeader className="py-3 px-4 flex flex-row items-center justify-between">
+              <CardTitle className="text-[#3F2A51] text-xl">Tailored CV</CardTitle>
               <Button 
                 onClick={handleDownload}
                 className="bg-[#3F2A51] hover:bg-[#2A1C36] text-white"
+                size="sm"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Download
               </Button>
             </CardHeader>
-            <CardContent>
-              <div className="bg-white p-4 rounded-md h-[500px] overflow-y-auto whitespace-pre-line text-left text-sm content-panel">
+            <CardContent className="pt-0 px-4 pb-4">
+              <div className="bg-white p-3 rounded-md h-[520px] overflow-y-auto whitespace-pre-line text-left text-sm content-panel">
                 {mockTailoredCV}
               </div>
             </CardContent>
@@ -224,18 +222,18 @@ const Results = () => {
         {/* Improvements section at the bottom */}
         <div className="w-full">
           <Card className="border-[#E2DCF8] shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-[#3F2A51]">Improvements</CardTitle>
+            <CardHeader className="py-3 px-4">
+              <CardTitle className="text-[#3F2A51] text-xl">Improvements</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="bg-white p-4 rounded-md max-h-[300px] overflow-y-auto text-left content-panel">
+            <CardContent className="pt-0 px-4 pb-4">
+              <div className="bg-white p-3 rounded-md max-h-[280px] overflow-y-auto text-left content-panel">
                 {mockImprovements.map((improvement, index) => (
-                  <div key={index} className="mb-6">
-                    <h3 className="flex items-center text-[#3F2A51] font-semibold mb-2">
-                      <Star className="h-5 w-5 mr-2 text-[#AF93C8]" />
+                  <div key={index} className="mb-4">
+                    <h3 className="flex items-center text-[#3F2A51] font-semibold mb-1">
+                      <Star className="h-4 w-4 mr-2 text-[#AF93C8]" />
                       {improvement.category}
                     </h3>
-                    <ul className="list-disc pl-6 space-y-2">
+                    <ul className="list-disc pl-6 space-y-1">
                       {improvement.items.map((item, itemIndex) => (
                         <li key={itemIndex} className="text-sm text-gray-700">
                           {item}
