@@ -118,14 +118,16 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
         </label>
       ) : (
         <div className={`flex flex-col items-center justify-center bg-[#F8F6FE] rounded-md p-4 ${height}`}>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center w-full">
             <File className="h-16 w-16 text-[#AF93C8] mb-3" />
-            <p className="font-medium text-[#3F2A51] text-center max-w-full truncate">
-              {file.name}
-            </p>
-            <p className="text-sm text-[#AF93C8] mt-1 mb-4">
-              {formatFileSize(file.size)}
-            </p>
+            <div className="w-full px-4 flex flex-col items-center">
+              <p className="font-medium text-[#3F2A51] text-center w-full break-words overflow-hidden" style={{ wordBreak: "break-word", maxWidth: "100%" }}>
+                {file.name}
+              </p>
+              <p className="text-sm text-[#AF93C8] mt-1 mb-4">
+                {formatFileSize(file.size)}
+              </p>
+            </div>
             
             {!isProcessing && (
               <Button
