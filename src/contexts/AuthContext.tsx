@@ -58,9 +58,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
       
-      toast({
-        title: "Signed in successfully",
-      });
+      // Removed the success toast message here
       navigate("/");
     } catch (error: any) {
       toast({
