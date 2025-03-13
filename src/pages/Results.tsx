@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Download, Star } from "lucide-react";
@@ -79,6 +79,7 @@ const mockImprovements = [
 
 const Results = () => {
   const navigate = useNavigate();
+  const [showBanner, setShowBanner] = useState(true);
 
   const handleDownload = () => {
     // This would be connected to actual download logic in a real implementation
@@ -92,23 +93,60 @@ const Results = () => {
     navigate("/");
   };
 
+  const handleCloseBanner = () => {
+    setShowBanner(false);
+  };
+
   return (
     <div className="min-h-screen bg-[#F8F6FE] flex flex-col items-center px-4 py-8">
+      <style jsx global>{`
+        /* Custom scrollbar styles */
+        ::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+          background: #E2DCF8;
+          border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+          background: #9b87f5;
+          border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+          background: #7E69AB;
+        }
+        
+        /* Firefox scrollbar */
+        * {
+          scrollbar-width: thin;
+          scrollbar-color: #9b87f5 #E2DCF8;
+        }
+      `}</style>
       <div className="w-full max-w-6xl">
         {/* Success Message */}
-        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-8 rounded flex items-start justify-between">
-          <div className="flex items-start">
-            <span className="flex-shrink-0 mr-2">✓</span>
-            <p>
-              <span className="font-bold">Success!</span>
-              <br />
-              Your CV has been tailored to match the job description. You can now copy it into your own CV format for editing or start over.
-            </p>
+        {showBanner && (
+          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-8 rounded flex items-start justify-between">
+            <div className="flex items-start">
+              <span className="flex-shrink-0 mr-2">✓</span>
+              <p>
+                <span className="font-bold">Success!</span>
+                <br />
+                Your CV has been tailored to match the job description. You can now copy it into your own CV format for editing or start over.
+              </p>
+            </div>
+            <button 
+              className="text-green-500 hover:text-green-700" 
+              aria-label="Close"
+              onClick={handleCloseBanner}
+            >
+              <span className="text-xl">×</span>
+            </button>
           </div>
-          <button className="text-green-500 hover:text-green-700" aria-label="Close">
-            <span className="text-xl">×</span>
-          </button>
-        </div>
+        )}
         
         {/* Header with back button */}
         <div className="mb-8 flex items-center">
