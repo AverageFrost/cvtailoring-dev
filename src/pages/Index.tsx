@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,6 +27,9 @@ const Index = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { user } = useAuth();
+  
+  // Check if any upload is in progress
+  const isUploading = isCvUploading || isJobUploading;
   
   const handleCvUpload = async (file: File) => {
     const fileExtension = `.${file.name.split(".").pop()}`.toLowerCase();
@@ -209,8 +212,6 @@ const Index = () => {
 
   const isFormComplete = cvFile.file && (jobDescription.file || (jobDescription.content && jobDescription.content.trim() !== ""));
   const hasJobText = !!jobDescription.content && jobDescription.content.trim() !== "";
-  // Check if any upload is in progress
-  const isUploading = isCvUploading || isJobUploading;
 
   return (
     <div className="min-h-screen bg-[#F8F6FE] flex flex-col items-center px-4 py-8">
@@ -372,6 +373,7 @@ const Index = () => {
               <p className="text-[#AF93C8] mt-4 text-center">
                 {!user && isFormComplete ? 
                   "Sign in to save your CV and job descriptions" : 
+                  isFormComplete ? "Click to tailor your CV to this job description" :
                   "Please upload your CV and provide a job description to continue"}
               </p>
             </>
