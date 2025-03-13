@@ -20,7 +20,8 @@ const Index = () => {
   const [cvFile, setCvFile] = useState<FileData>({ file: null });
   const [jobDescription, setJobDescription] = useState<FileData>({ file: null, content: "" });
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
+  const [isCvUploading, setIsCvUploading] = useState(false);
+  const [isJobUploading, setIsJobUploading] = useState(false);
   const [remainingTime, setRemainingTime] = useState(29);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const Index = () => {
     }
     
     if (user) {
-      setIsUploading(true);
+      setIsCvUploading(true);
       try {
         // Upload the file to Supabase storage
         const filePath = `${user.id}/cv/${Date.now()}_${file.name}`;
@@ -58,7 +59,7 @@ const Index = () => {
           variant: "destructive",
         });
       } finally {
-        setIsUploading(false);
+        setIsCvUploading(false);
       }
     } else {
       // If not authenticated, just set the file locally
@@ -78,7 +79,7 @@ const Index = () => {
     }
     
     if (user) {
-      setIsUploading(true);
+      setIsJobUploading(true);
       try {
         // Upload the file to Supabase storage
         const filePath = `${user.id}/job/${Date.now()}_${file.name}`;
@@ -98,7 +99,7 @@ const Index = () => {
           variant: "destructive",
         });
       } finally {
-        setIsUploading(false);
+        setIsJobUploading(false);
       }
     } else {
       // If not authenticated, just set the file locally
@@ -111,7 +112,7 @@ const Index = () => {
   };
 
   const handleRemoveCv = async () => {
-    if (!isProcessing && !isUploading) {
+    if (!isProcessing && !isCvUploading) {
       // If the file was uploaded to Supabase, remove it from storage
       if (user && cvFile.filePath) {
         try {
@@ -132,7 +133,7 @@ const Index = () => {
   };
 
   const handleRemoveJobFile = async () => {
-    if (!isProcessing && !isUploading) {
+    if (!isProcessing && !isJobUploading) {
       // If the file was uploaded to Supabase, remove it from storage
       if (user && jobDescription.filePath) {
         try {
@@ -153,7 +154,7 @@ const Index = () => {
   };
 
   const handleClearJobText = () => {
-    if (!isProcessing && !isUploading) {
+    if (!isProcessing && !isJobUploading) {
       setJobDescription({ file: null, content: "" });
     }
   };
@@ -231,7 +232,8 @@ const Index = () => {
                 acceptedTypesText="Accepted file types: DOCX, TXT"
                 icon={<Upload className="h-12 w-12 text-[#AF93C8]" />}
                 height="h-[350px]"
-                isProcessing={isProcessing || isUploading}
+                isProcessing={isProcessing}
+                isUploading={isCvUploading}
               />
             </CardContent>
           </Card>
@@ -251,7 +253,8 @@ const Index = () => {
                   acceptedTypesText="Accepted file types: DOCX, TXT"
                   icon={<Upload className="h-12 w-12 text-[#AF93C8]" />}
                   height="h-[350px]"
-                  isProcessing={isProcessing || isUploading}
+                  isProcessing={isProcessing}
+                  isUploading={isJobUploading}
                 />
               ) : hasJobText ? (
                 <div className="flex flex-col h-[350px]">
@@ -263,7 +266,7 @@ const Index = () => {
                       size="sm"
                       className="text-[#AF93C8] hover:text-[#3F2A51] hover:bg-[#E2DCF8] p-1 h-auto"
                       aria-label="Clear text"
-                      disabled={isProcessing || isUploading}
+                      disabled={isProcessing}
                     >
                       <X className="h-4 w-4 mr-1" /> Clear
                     </Button>
@@ -274,7 +277,7 @@ const Index = () => {
                       className="w-full flex-grow border-0 focus-visible:ring-0 resize-none overflow-auto"
                       value={jobDescription.content || ""}
                       onChange={handleJobTextChange}
-                      disabled={isProcessing || isUploading}
+                      disabled={isProcessing}
                     />
                   </div>
                 </div>
@@ -289,7 +292,8 @@ const Index = () => {
                     acceptedTypesText="Accepted file types: DOCX, TXT"
                     icon={<Upload className="h-12 w-12 text-[#AF93C8]" />}
                     height="h-[150px]"
-                    isProcessing={isUploading}
+                    isProcessing={isProcessing}
+                    isUploading={isJobUploading}
                   />
                   
                   <div className="mt-4">
@@ -347,10 +351,10 @@ const Index = () => {
             <>
               <Button 
                 onClick={handleTailorCv}
-                disabled={!isFormComplete || isUploading}
+                disabled={!isFormComplete || isCvUploading || isJobUploading}
                 className="bg-[#3F2A51] hover:bg-[#2A1C36] text-white transition-colors px-8 py-6 rounded-full text-lg min-w-[240px]"
               >
-                {isUploading ? (
+                {isCvUploading || isJobUploading ? (
                   <>
                     <Loader className="h-4 w-4 animate-spin mr-2" />
                     Uploading...

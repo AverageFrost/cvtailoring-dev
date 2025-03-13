@@ -15,6 +15,7 @@ interface FileUploadAreaProps {
   icon: React.ReactNode;
   height?: string;
   isProcessing?: boolean;
+  isUploading?: boolean;
 }
 
 const FileUploadArea: React.FC<FileUploadAreaProps> = ({
@@ -27,6 +28,7 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
   icon,
   height = "h-[150px]",
   isProcessing = false,
+  isUploading = false,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const { toast } = useToast();
@@ -46,7 +48,7 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
       e.preventDefault();
       setIsDragging(false);
 
-      if (isProcessing) return;
+      if (isProcessing || isUploading) return;
 
       if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
         const file = e.dataTransfer.files[0];
@@ -63,12 +65,12 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
         }
       }
     },
-    [acceptedTypes, acceptedTypesText, onFileUpload, toast, isProcessing]
+    [acceptedTypes, acceptedTypesText, onFileUpload, toast, isProcessing, isUploading]
   );
 
   const handleFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (isProcessing) return;
+      if (isProcessing || isUploading) return;
       
       if (e.target.files && e.target.files.length > 0) {
         const file = e.target.files[0];
@@ -85,7 +87,7 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
         }
       }
     },
-    [acceptedTypes, acceptedTypesText, onFileUpload, toast, isProcessing]
+    [acceptedTypes, acceptedTypesText, onFileUpload, toast, isProcessing, isUploading]
   );
 
   const formatFileSize = (bytes: number): string => {
@@ -113,16 +115,16 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
             accept={acceptedTypes}
             onChange={handleFileChange}
             className="hidden"
-            disabled={isProcessing}
+            disabled={isProcessing || isUploading}
           />
           <div className="flex flex-col items-center">
-            {isProcessing ? (
+            {isUploading ? (
               <Loader className="h-12 w-12 text-[#AF93C8] animate-spin" />
             ) : (
               icon
             )}
             <p className="mt-2 text-[#3F2A51] font-medium">
-              {isProcessing ? "Uploading..." : uploadText}
+              {isUploading ? "Uploading..." : uploadText}
             </p>
             <p className="mt-1 text-sm text-[#AF93C8]">{acceptedTypesText}</p>
           </div>
@@ -140,14 +142,14 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
               </p>
             </div>
             
-            {!isProcessing && (
+            {!isProcessing && !isUploading && (
               <Button
                 onClick={onRemoveFile}
                 variant="outline"
                 size="sm"
                 className="mt-2 bg-white hover:bg-gray-50 border-gray-200"
                 aria-label="Remove file"
-                disabled={isProcessing}
+                disabled={isProcessing || isUploading}
               >
                 <X className="h-4 w-4 mr-1" /> Remove
               </Button>
