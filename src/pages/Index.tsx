@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -234,7 +235,7 @@ const Index = () => {
         <div className="flex flex-col items-center">
           {isProcessing ? (
             <div className="flex flex-col items-center">
-              <div className="bg-[#AF93C8] bg-opacity-30 text-[#3F2A51] px-8 py-4 rounded-full mb-4 flex items-center">
+              <div className="bg-[#AF93C8] bg-opacity-30 text-[#3F2A51] px-8 py-4 rounded-full mb-4 flex items-center min-w-[240px] justify-center">
                 <Loader className="h-6 w-6 text-[#3F2A51] animate-spin mr-3" />
                 <span className="text-lg font-medium">Tailoring your CV...</span>
               </div>
@@ -256,7 +257,7 @@ const Index = () => {
               <Button 
                 onClick={handleTailorCv}
                 disabled={!isFormComplete}
-                className="bg-[#3F2A51] hover:bg-[#2A1C36] text-white transition-colors px-8 py-6 rounded-full text-lg"
+                className="bg-[#3F2A51] hover:bg-[#2A1C36] text-white transition-colors px-8 py-6 rounded-full text-lg min-w-[240px]"
               >
                 Tailor CV <ArrowRight className="ml-2" />
               </Button>
