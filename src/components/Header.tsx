@@ -9,22 +9,22 @@ const Header = () => {
   const { user, signOut } = useAuth();
 
   return (
-    <header className="w-full bg-[#3F2A51] text-white py-3 px-4">
+    <header className="w-full py-3 px-4 absolute top-0 z-10">
       <div className="max-w-6xl mx-auto flex justify-between items-center">
-        <Link to="/" className="text-xl font-bold">CV Tailor</Link>
+        <Link to="/" className="text-xl font-bold text-[#3F2A51]">CV Tailor</Link>
         
         <div>
           {user ? (
             <div className="flex items-center gap-3">
-              <span className="text-sm hidden md:block">
+              <span className="text-sm hidden md:block text-[#3F2A51]">
                 <User className="inline h-4 w-4 mr-1" />
                 {user.email}
               </span>
               <Button 
-                variant="ghost" 
+                variant="outline" 
                 size="sm"
                 onClick={signOut}
-                className="text-white hover:bg-white/20"
+                className="text-[#3F2A51] border-[#3F2A51] hover:bg-[#3F2A51]/10"
               >
                 <LogOut className="h-4 w-4 mr-1" />
                 Sign Out
@@ -32,10 +32,10 @@ const Header = () => {
             </div>
           ) : (
             <Button 
-              variant="ghost" 
+              variant="outline" 
               size="sm"
               asChild
-              className="text-white hover:bg-white/20"
+              className="text-[#3F2A51] border-[#3F2A51] hover:bg-[#3F2A51]/10"
             >
               <Link to="/auth">
                 <LogIn className="h-4 w-4 mr-1" />

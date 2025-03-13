@@ -21,22 +21,25 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <Header />
-          <Routes>
-            <Route path="/" element={
-              <ProtectedRoute>
-                <Index />
-              </ProtectedRoute>
-            } />
-            <Route path="/results" element={
-              <ProtectedRoute>
-                <Results />
-              </ProtectedRoute>
-            } />
-            <Route path="/auth" element={<Auth />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <div className="min-h-screen bg-[#F8F6FE]">
+            <Header />
+            <main className="pt-16"> {/* Added padding to account for absolute header */}
+              <Routes>
+                <Route path="/" element={
+                  <ProtectedRoute>
+                    <Index />
+                  </ProtectedRoute>
+                } />
+                <Route path="/results" element={
+                  <ProtectedRoute>
+                    <Results />
+                  </ProtectedRoute>
+                } />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+          </div>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
