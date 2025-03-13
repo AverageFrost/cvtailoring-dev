@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -118,6 +119,7 @@ const Index = () => {
   };
 
   const isFormComplete = cvFile.file && (jobDescription.file || (jobDescription.content && jobDescription.content.trim() !== ""));
+  const hasJobText = !!jobDescription.content && jobDescription.content.trim() !== "";
 
   return (
     <div className="min-h-screen bg-[#F8F6FE] flex flex-col items-center px-4 py-12">
@@ -164,6 +166,31 @@ const Index = () => {
                   height="h-[350px]"
                   isProcessing={isProcessing}
                 />
+              ) : hasJobText ? (
+                <div className="flex flex-col h-[350px]">
+                  <div className="p-4 bg-[#F8F6FE] rounded-md flex justify-between items-center mb-2">
+                    <span className="text-[#3F2A51] font-medium">Pasted Text</span>
+                    <Button
+                      onClick={handleClearJobText}
+                      variant="ghost"
+                      size="sm"
+                      className="text-[#AF93C8] hover:text-[#3F2A51] hover:bg-[#E2DCF8] p-1 h-auto"
+                      aria-label="Clear text"
+                      disabled={isProcessing}
+                    >
+                      <X className="h-4 w-4 mr-1" /> Clear
+                    </Button>
+                  </div>
+                  <div className="relative flex-grow">
+                    <Textarea 
+                      placeholder="Paste job description here..."
+                      className="w-full h-full min-h-[300px] border-[#E2DCF8] focus-visible:ring-[#AF93C8] resize-none"
+                      value={jobDescription.content || ""}
+                      onChange={handleJobTextChange}
+                      disabled={isProcessing}
+                    />
+                  </div>
+                </div>
               ) : (
                 <>
                   <FileUploadArea 
@@ -174,6 +201,7 @@ const Index = () => {
                     uploadText="Drag and drop a job description file"
                     acceptedTypesText="Accepted file types: DOCX, TXT"
                     icon={<Upload className="h-12 w-12 text-[#AF93C8]" />}
+                    height="h-[150px]"
                   />
                   
                   <div className="mt-4">
