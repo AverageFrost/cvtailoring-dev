@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,21 +8,26 @@ import FileUploadArea from "@/components/FileUploadArea";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface FileData {
   file: File | null;
   content?: string;
+  filePath?: string;
 }
 
 const Index = () => {
   const [cvFile, setCvFile] = useState<FileData>({ file: null });
   const [jobDescription, setJobDescription] = useState<FileData>({ file: null, content: "" });
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [remainingTime, setRemainingTime] = useState(29);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { user } = useAuth();
   
-  const handleCvUpload = (file: File) => {
+  const handleCvUpload = async (file: File) => {
     const fileExtension = `.${file.name.split(".").pop()}`.toLowerCase();
     if (![".docx", ".txt"].includes(fileExtension)) {
       toast({
@@ -33,10 +38,45 @@ const Index = () => {
       return;
     }
     
-    setCvFile({ file });
+    if (user) {
+      setIsUploading(true);
+      try {
+        // Upload the file to Supabase storage
+        const filePath = `${user.id}/cv/${Date.now()}_${file.name}`;
+        const { error } = await supabase.storage
+          .from('user_files')
+          .upload(filePath, file);
+          
+        if (error) {
+          throw error;
+        }
+        
+        setCvFile({ file, filePath });
+        
+        toast({
+          title: "CV uploaded",
+          description: "Your CV has been uploaded successfully",
+        });
+      } catch (error: any) {
+        toast({
+          title: "Upload failed",
+          description: error.message || "Failed to upload your CV",
+          variant: "destructive",
+        });
+      } finally {
+        setIsUploading(false);
+      }
+    } else {
+      // If not authenticated, just set the file locally
+      setCvFile({ file });
+      toast({
+        title: "Sign in recommended",
+        description: "Sign in to save your CV and job descriptions",
+      });
+    }
   };
 
-  const handleJobFileUpload = (file: File) => {
+  const handleJobFileUpload = async (file: File) => {
     const fileExtension = `.${file.name.split(".").pop()}`.toLowerCase();
     if (![".docx", ".txt"].includes(fileExtension)) {
       toast({
@@ -47,27 +87,92 @@ const Index = () => {
       return;
     }
     
-    setJobDescription({ file, content: "" });
+    if (user) {
+      setIsUploading(true);
+      try {
+        // Upload the file to Supabase storage
+        const filePath = `${user.id}/job/${Date.now()}_${file.name}`;
+        const { error } = await supabase.storage
+          .from('user_files')
+          .upload(filePath, file);
+          
+        if (error) {
+          throw error;
+        }
+        
+        setJobDescription({ file, filePath, content: "" });
+        
+        toast({
+          title: "Job description uploaded",
+          description: "Your job description has been uploaded successfully",
+        });
+      } catch (error: any) {
+        toast({
+          title: "Upload failed",
+          description: error.message || "Failed to upload your job description",
+          variant: "destructive",
+        });
+      } finally {
+        setIsUploading(false);
+      }
+    } else {
+      // If not authenticated, just set the file locally
+      setJobDescription({ file, content: "" });
+      toast({
+        title: "Sign in recommended",
+        description: "Sign in to save your CV and job descriptions",
+      });
+    }
   };
 
   const handleJobTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setJobDescription({ file: null, content: e.target.value });
   };
 
-  const handleRemoveCv = () => {
-    if (!isProcessing) {
+  const handleRemoveCv = async () => {
+    if (!isProcessing && !isUploading) {
+      // If the file was uploaded to Supabase, remove it from storage
+      if (user && cvFile.filePath) {
+        try {
+          const { error } = await supabase.storage
+            .from('user_files')
+            .remove([cvFile.filePath]);
+            
+          if (error) {
+            throw error;
+          }
+        } catch (error: any) {
+          console.error("Error removing file:", error.message);
+        }
+      }
+      
       setCvFile({ file: null });
     }
   };
 
-  const handleRemoveJobFile = () => {
-    if (!isProcessing) {
+  const handleRemoveJobFile = async () => {
+    if (!isProcessing && !isUploading) {
+      // If the file was uploaded to Supabase, remove it from storage
+      if (user && jobDescription.filePath) {
+        try {
+          const { error } = await supabase.storage
+            .from('user_files')
+            .remove([jobDescription.filePath]);
+            
+          if (error) {
+            throw error;
+          }
+        } catch (error: any) {
+          console.error("Error removing file:", error.message);
+        }
+      }
+      
       setJobDescription({ file: null, content: "" });
     }
   };
 
   const handleClearJobText = () => {
-    if (!isProcessing) {
+    if (!isProcessing && !isUploading) {
       setJobDescription({ file: null, content: "" });
     }
   };
@@ -145,7 +250,7 @@ const Index = () => {
                 acceptedTypesText="Accepted file types: DOCX, TXT"
                 icon={<Upload className="h-12 w-12 text-[#AF93C8]" />}
                 height="h-[350px]"
-                isProcessing={isProcessing}
+                isProcessing={isProcessing || isUploading}
               />
             </CardContent>
           </Card>
@@ -165,7 +270,7 @@ const Index = () => {
                   acceptedTypesText="Accepted file types: DOCX, TXT"
                   icon={<Upload className="h-12 w-12 text-[#AF93C8]" />}
                   height="h-[350px]"
-                  isProcessing={isProcessing}
+                  isProcessing={isProcessing || isUploading}
                 />
               ) : hasJobText ? (
                 <div className="flex flex-col h-[350px]">
@@ -177,7 +282,7 @@ const Index = () => {
                       size="sm"
                       className="text-[#AF93C8] hover:text-[#3F2A51] hover:bg-[#E2DCF8] p-1 h-auto"
                       aria-label="Clear text"
-                      disabled={isProcessing}
+                      disabled={isProcessing || isUploading}
                     >
                       <X className="h-4 w-4 mr-1" /> Clear
                     </Button>
@@ -188,7 +293,7 @@ const Index = () => {
                       className="w-full flex-grow border-0 focus-visible:ring-0 resize-none overflow-auto"
                       value={jobDescription.content || ""}
                       onChange={handleJobTextChange}
-                      disabled={isProcessing}
+                      disabled={isProcessing || isUploading}
                     />
                   </div>
                 </div>
@@ -203,6 +308,7 @@ const Index = () => {
                     acceptedTypesText="Accepted file types: DOCX, TXT"
                     icon={<Upload className="h-12 w-12 text-[#AF93C8]" />}
                     height="h-[150px]"
+                    isProcessing={isUploading}
                   />
                   
                   <div className="mt-4">
@@ -260,14 +366,25 @@ const Index = () => {
             <>
               <Button 
                 onClick={handleTailorCv}
-                disabled={!isFormComplete}
+                disabled={!isFormComplete || isUploading}
                 className="bg-[#3F2A51] hover:bg-[#2A1C36] text-white transition-colors px-8 py-6 rounded-full text-lg min-w-[240px]"
               >
-                Tailor CV <ArrowRight className="ml-2" />
+                {isUploading ? (
+                  <>
+                    <Loader className="h-4 w-4 animate-spin mr-2" />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    Tailor CV <ArrowRight className="ml-2" />
+                  </>
+                )}
               </Button>
               
               <p className="text-[#AF93C8] mt-4 text-center">
-                Please upload your CV and provide a job description to continue
+                {!user && isFormComplete ? 
+                  "Sign in to save your CV and job descriptions" : 
+                  "Please upload your CV and provide a job description to continue"}
               </p>
             </>
           )}

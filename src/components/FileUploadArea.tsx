@@ -1,7 +1,7 @@
 
 import React, { useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
-import { File, X } from "lucide-react";
+import { File, X, Loader } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 
@@ -46,6 +46,8 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
       e.preventDefault();
       setIsDragging(false);
 
+      if (isProcessing) return;
+
       if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
         const file = e.dataTransfer.files[0];
         const fileExtension = `.${file.name.split(".").pop()}`.toLowerCase();
@@ -61,11 +63,13 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
         }
       }
     },
-    [acceptedTypes, acceptedTypesText, onFileUpload, toast]
+    [acceptedTypes, acceptedTypesText, onFileUpload, toast, isProcessing]
   );
 
   const handleFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (isProcessing) return;
+      
       if (e.target.files && e.target.files.length > 0) {
         const file = e.target.files[0];
         const fileExtension = `.${file.name.split(".").pop()}`.toLowerCase();
@@ -81,7 +85,7 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
         }
       }
     },
-    [acceptedTypes, acceptedTypesText, onFileUpload, toast]
+    [acceptedTypes, acceptedTypesText, onFileUpload, toast, isProcessing]
   );
 
   const formatFileSize = (bytes: number): string => {
@@ -109,10 +113,17 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
             accept={acceptedTypes}
             onChange={handleFileChange}
             className="hidden"
+            disabled={isProcessing}
           />
           <div className="flex flex-col items-center">
-            {icon}
-            <p className="mt-2 text-[#3F2A51] font-medium">{uploadText}</p>
+            {isProcessing ? (
+              <Loader className="h-12 w-12 text-[#AF93C8] animate-spin" />
+            ) : (
+              icon
+            )}
+            <p className="mt-2 text-[#3F2A51] font-medium">
+              {isProcessing ? "Uploading..." : uploadText}
+            </p>
             <p className="mt-1 text-sm text-[#AF93C8]">{acceptedTypesText}</p>
           </div>
         </label>
