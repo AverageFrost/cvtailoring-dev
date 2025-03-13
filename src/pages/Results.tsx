@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,7 +5,6 @@ import { ArrowLeft, Download, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 
-// Mock data for demonstration purposes
 const mockJobDescription = `Sign in
 
 Find Jobs
@@ -82,7 +80,6 @@ const Results = () => {
   const [showBanner, setShowBanner] = useState(true);
 
   const handleDownload = () => {
-    // This would be connected to actual download logic in a real implementation
     toast({
       title: "Download started",
       description: "Your tailored CV is being downloaded as a DOCX file.",
@@ -101,11 +98,11 @@ const Results = () => {
     <div className="min-h-screen bg-[#F8F6FE] flex flex-col items-center px-4 py-8">
       <style dangerouslySetInnerHTML={{
         __html: `
-          /* Custom scrollbar styles - only visible on scroll */
+          /* Custom scrollbar styles - only visible on scroll/hover */
           .content-panel {
             overflow-y: auto;
             scrollbar-width: thin;
-            scrollbar-color: rgba(159, 135, 245, 0.5) rgba(226, 220, 248, 0.3);
+            scrollbar-color: transparent transparent;
           }
           
           .content-panel::-webkit-scrollbar {
@@ -115,33 +112,37 @@ const Results = () => {
           }
           
           .content-panel::-webkit-scrollbar-track {
-            background: rgba(226, 220, 248, 0.3);
+            background: transparent;
             border-radius: 4px;
           }
           
           .content-panel::-webkit-scrollbar-thumb {
-            background: rgba(159, 135, 245, 0.5);
+            background: transparent;
             border-radius: 4px;
           }
           
-          .content-panel::-webkit-scrollbar-thumb:hover {
-            background: rgba(126, 105, 171, 0.7);
-          }
-          
-          /* Hide scrollbar until hover/scroll */
-          .content-panel::-webkit-scrollbar-thumb {
-            visibility: hidden;
-          }
-          
+          /* Show scrollbar on hover/scroll */
           .content-panel:hover::-webkit-scrollbar-thumb,
           .content-panel:focus::-webkit-scrollbar-thumb,
           .content-panel:active::-webkit-scrollbar-thumb {
-            visibility: visible;
+            background: rgba(159, 135, 245, 0.5);
+          }
+          
+          .content-panel:hover::-webkit-scrollbar-track,
+          .content-panel:focus::-webkit-scrollbar-track,
+          .content-panel:active::-webkit-scrollbar-track {
+            background: rgba(226, 220, 248, 0.3);
+          }
+          
+          /* For Firefox */
+          .content-panel:hover,
+          .content-panel:focus-within,
+          .content-panel:active {
+            scrollbar-color: rgba(159, 135, 245, 0.5) rgba(226, 220, 248, 0.3);
           }
         `
       }} />
       <div className="w-full max-w-6xl">
-        {/* Success Message */}
         {showBanner && (
           <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-8 rounded flex items-start justify-between">
             <div className="flex items-start">
@@ -162,7 +163,6 @@ const Results = () => {
           </div>
         )}
         
-        {/* Header with back button */}
         <div className="mb-8 flex items-center">
           <Button 
             onClick={handleGoBack} 
@@ -175,9 +175,7 @@ const Results = () => {
           <h1 className="text-4xl font-bold text-[#3F2A51]">Your Tailored CV</h1>
         </div>
 
-        {/* Main content */}
         <div className="grid md:grid-cols-3 gap-8">
-          {/* Job Description */}
           <Card className="border-[#E2DCF8] shadow-sm">
             <CardHeader>
               <CardTitle className="text-[#3F2A51]">Job Description</CardTitle>
@@ -189,7 +187,6 @@ const Results = () => {
             </CardContent>
           </Card>
 
-          {/* Tailored CV */}
           <Card className="border-[#E2DCF8] shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-[#3F2A51]">Tailored CV</CardTitle>
@@ -208,7 +205,6 @@ const Results = () => {
             </CardContent>
           </Card>
 
-          {/* Improvements */}
           <Card className="border-[#E2DCF8] shadow-sm">
             <CardHeader>
               <CardTitle className="text-[#3F2A51]">Improvements</CardTitle>
