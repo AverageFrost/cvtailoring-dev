@@ -30,13 +30,16 @@ const Header = () => {
                   className="flex items-center gap-2 text-[#3F2A51] hover:bg-[#3F2A51]/5"
                 >
                   <User className="h-4 w-4" />
-                  <span className="text-sm">{user.email}</span>
+                  <span className="text-sm">{user.user_metadata?.full_name || user.email}</span>
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-[#1E1E1E] border-[#2F2F2F] text-white">
+              <DropdownMenuContent 
+                align="end" 
+                className="bg-slate-800 border-slate-700 text-white shadow-lg"
+              >
                 <DropdownMenuItem 
-                  className="cursor-pointer hover:bg-[#333333] focus:bg-[#333333]"
+                  className="cursor-pointer hover:bg-slate-700 focus:bg-slate-700"
                   onClick={signOut}
                 >
                   <LogOut className="h-4 w-4 mr-2" />
