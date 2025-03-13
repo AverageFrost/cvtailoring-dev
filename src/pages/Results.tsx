@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -175,7 +176,8 @@ const Results = () => {
           <h1 className="text-4xl font-bold text-[#3F2A51]">Your Tailored CV</h1>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        {/* Main content - job description and tailored CV side by side */}
+        <div className="grid md:grid-cols-2 gap-8 mb-8">
           <Card className="border-[#E2DCF8] shadow-sm">
             <CardHeader>
               <CardTitle className="text-[#3F2A51]">Job Description</CardTitle>
@@ -204,13 +206,16 @@ const Results = () => {
               </div>
             </CardContent>
           </Card>
+        </div>
 
+        {/* Improvements section at the bottom */}
+        <div className="w-full">
           <Card className="border-[#E2DCF8] shadow-sm">
             <CardHeader>
               <CardTitle className="text-[#3F2A51]">Improvements</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="bg-white p-4 rounded-md h-[500px] overflow-y-auto text-left content-panel">
+              <div className="bg-white p-4 rounded-md max-h-[300px] overflow-y-auto text-left content-panel">
                 {mockImprovements.map((improvement, index) => (
                   <div key={index} className="mb-6">
                     <h3 className="flex items-center text-[#3F2A51] font-semibold mb-2">
