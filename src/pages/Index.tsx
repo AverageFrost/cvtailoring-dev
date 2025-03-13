@@ -31,6 +31,57 @@ const Index = () => {
   // Check if any upload is in progress
   const isUploading = isCvUploading || isJobUploading;
   
+  // Load previously uploaded CV if user is authenticated
+  useEffect(() => {
+    const loadPreviousCV = async () => {
+      if (user) {
+        try {
+          // List files from user's CV folder
+          const { data, error } = await supabase.storage
+            .from('user_files')
+            .list(`${user.id}/cv`, {
+              limit: 1,
+              sortBy: { column: 'created_at', order: 'desc' }
+            });
+            
+          if (error) {
+            throw error;
+          }
+          
+          // If there's a previously uploaded CV, fetch it
+          if (data && data.length > 0) {
+            const latestFile = data[0];
+            const filePath = `${user.id}/cv/${latestFile.name}`;
+            
+            // Get URL for the file
+            const { data: fileData, error: fileError } = await supabase.storage
+              .from('user_files')
+              .download(filePath);
+              
+            if (fileError) {
+              throw fileError;
+            }
+            
+            // Create a File object
+            if (fileData) {
+              const file = new File(
+                [fileData], 
+                latestFile.name, 
+                { type: fileData.type }
+              );
+              
+              setCvFile({ file, filePath });
+            }
+          }
+        } catch (error: any) {
+          console.error("Error loading previous CV:", error.message);
+        }
+      }
+    };
+    
+    loadPreviousCV();
+  }, [user]);
+
   const handleCvUpload = async (file: File) => {
     const fileExtension = `.${file.name.split(".").pop()}`.toLowerCase();
     if (![".docx", ".txt"].includes(fileExtension)) {
