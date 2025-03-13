@@ -181,10 +181,10 @@ const Index = () => {
                       <X className="h-4 w-4 mr-1" /> Clear
                     </Button>
                   </div>
-                  <div className="relative flex-grow flex flex-col">
+                  <div className="h-[316px] flex flex-col"> {/* Fixed height to match the CV upload area */}
                     <Textarea 
                       placeholder="Paste job description here..."
-                      className="w-full flex-grow min-h-[300px] border-[#E2DCF8] focus-visible:ring-[#AF93C8] resize-none overflow-auto"
+                      className="w-full flex-grow border-[#E2DCF8] focus-visible:ring-[#AF93C8] resize-none overflow-auto"
                       value={jobDescription.content || ""}
                       onChange={handleJobTextChange}
                       disabled={isProcessing}
