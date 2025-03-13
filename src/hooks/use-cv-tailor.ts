@@ -8,7 +8,7 @@ export interface FileData {
   file: File | null;
   content?: string;
   filePath?: string;
-  isExistingFile?: boolean; // Ensuring this is explicitly boolean
+  isExistingFile?: boolean; // This is explicitly a boolean type
 }
 
 export const useCvTailor = (user: User | null) => {

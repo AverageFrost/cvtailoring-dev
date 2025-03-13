@@ -42,7 +42,7 @@ const Index = () => {
             file={cvFile.file}
             isProcessing={isProcessing}
             isUploading={isCvUploading}
-            isExistingFile={typeof cvFile.isExistingFile === 'boolean' ? cvFile.isExistingFile : false}
+            isExistingFile={!!cvFile.isExistingFile}
           />
 
           <JobDescriptionCard 
