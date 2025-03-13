@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -208,6 +209,8 @@ const Index = () => {
 
   const isFormComplete = cvFile.file && (jobDescription.file || (jobDescription.content && jobDescription.content.trim() !== ""));
   const hasJobText = !!jobDescription.content && jobDescription.content.trim() !== "";
+  // Check if any upload is in progress
+  const isUploading = isCvUploading || isJobUploading;
 
   return (
     <div className="min-h-screen bg-[#F8F6FE] flex flex-col items-center px-4 py-8">
@@ -351,10 +354,10 @@ const Index = () => {
             <>
               <Button 
                 onClick={handleTailorCv}
-                disabled={!isFormComplete || isCvUploading || isJobUploading}
+                disabled={!isFormComplete || isUploading}
                 className="bg-[#3F2A51] hover:bg-[#2A1C36] text-white transition-colors px-8 py-6 rounded-full text-lg min-w-[240px]"
               >
-                {isCvUploading || isJobUploading ? (
+                {isUploading ? (
                   <>
                     <Loader className="h-4 w-4 animate-spin mr-2" />
                     Uploading...
