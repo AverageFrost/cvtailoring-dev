@@ -2,8 +2,14 @@
 import React from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { LogOut, LogIn, User } from "lucide-react";
+import { LogIn, LogOut, User, ChevronDown } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
   const { user, signOut } = useAuth();
@@ -17,21 +23,27 @@ const Header = () => {
         
         <div>
           {user ? (
-            <div className="flex items-center gap-3">
-              <span className="text-sm hidden md:block text-[#3F2A51]">
-                <User className="inline h-4 w-4 mr-1" />
-                {user.email}
-              </span>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={signOut}
-                className="text-[#3F2A51] border-[#3F2A51] hover:bg-[#3F2A51]/10"
-              >
-                <LogOut className="h-4 w-4 mr-1" />
-                Sign Out
-              </Button>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  className="flex items-center gap-2 text-[#3F2A51] hover:bg-[#3F2A51]/5"
+                >
+                  <User className="h-4 w-4" />
+                  <span className="text-sm">{user.email}</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-[#1E1E1E] border-[#2F2F2F] text-white">
+                <DropdownMenuItem 
+                  className="cursor-pointer hover:bg-[#333333] focus:bg-[#333333]"
+                  onClick={signOut}
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  <span>Sign out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             !isAuthPage && (
               <Button 
