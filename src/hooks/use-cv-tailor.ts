@@ -83,10 +83,37 @@ export const useCvTailor = (user: User | null) => {
     if (user) {
       setIsCvUploading(true);
       try {
-        const filePath = `${user.id}/cv/${Date.now()}_${file.name}`;
+        // Create a consistent filename using user_cv instead of timestamps
+        const fileName = `user_cv${fileExtension}`;
+        const filePath = `${user.id}/cv/${fileName}`;
+        
+        // Check if the file already exists and needs to be replaced
+        const { data, error: listError } = await supabase.storage
+          .from('user_files')
+          .list(`${user.id}/cv`);
+          
+        if (listError) {
+          throw listError;
+        }
+        
+        // If a file with this name already exists, remove it first
+        if (data && data.some(item => item.name === fileName)) {
+          const { error: removeError } = await supabase.storage
+            .from('user_files')
+            .remove([filePath]);
+            
+          if (removeError) {
+            throw removeError;
+          }
+        }
+        
+        // Upload the new file
         const { error } = await supabase.storage
           .from('user_files')
-          .upload(filePath, file);
+          .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: true
+          });
           
         if (error) {
           throw error;
