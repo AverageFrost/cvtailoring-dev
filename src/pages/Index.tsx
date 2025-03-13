@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -262,11 +261,9 @@ const Index = () => {
                 Tailor CV <ArrowRight className="ml-2" />
               </Button>
               
-              {!isFormComplete && (
-                <p className="text-[#AF93C8] mt-4 text-center">
-                  Please upload your CV and provide a job description to continue
-                </p>
-              )}
+              <p className="text-[#AF93C8] mt-4 text-center">
+                Please upload your CV and provide a job description to continue
+              </p>
             </>
           )}
         </div>
