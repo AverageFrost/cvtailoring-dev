@@ -3,6 +3,7 @@ import React, { useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
 import { File, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 
 interface FileUploadAreaProps {
   onFileUpload: (file: File) => void;
@@ -116,32 +117,28 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
           </div>
         </label>
       ) : (
-        <div className={`flex flex-col bg-[#F8F6FE] rounded-md p-4 ${height}`}>
-          <div className="flex items-start justify-between">
-            <div className="flex items-center">
-              <File className="h-8 w-8 text-[#AF93C8] mr-3" />
-              <div>
-                <p className="font-medium text-[#3F2A51] truncate max-w-[200px]">
-                  {file.name}
-                </p>
-                <p className="text-sm text-[#AF93C8]">
-                  {formatFileSize(file.size)}
-                </p>
-              </div>
-            </div>
+        <div className={`flex flex-col items-center justify-center bg-[#F8F6FE] rounded-md p-4 ${height}`}>
+          <div className="flex flex-col items-center">
+            <File className="h-16 w-16 text-[#AF93C8] mb-3" />
+            <p className="font-medium text-[#3F2A51] text-center max-w-full truncate">
+              {file.name}
+            </p>
+            <p className="text-sm text-[#AF93C8] mt-1 mb-4">
+              {formatFileSize(file.size)}
+            </p>
+            
             {!isProcessing && (
-              <button
+              <Button
                 onClick={onRemoveFile}
-                className="p-1.5 bg-white rounded-full hover:bg-[#F8F6FE] transition-colors"
+                variant="outline"
+                size="sm"
+                className="mt-2 bg-white hover:bg-gray-50 border-gray-200"
                 aria-label="Remove file"
                 disabled={isProcessing}
               >
-                <X className="h-5 w-5 text-[#AF93C8]" />
-              </button>
+                <X className="h-4 w-4 mr-1" /> Remove
+              </Button>
             )}
-          </div>
-          <div className="flex-grow flex items-center justify-center">
-            <p className="text-[#AF93C8] text-sm">File ready for processing</p>
           </div>
         </div>
       )}
