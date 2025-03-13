@@ -117,7 +117,7 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
           </div>
         </label>
       ) : (
-        <div className={`flex flex-col items-center justify-center bg-[#F8F6FE] rounded-md p-4 ${height}`}>
+        <div className={`flex flex-col items-center justify-center bg-[#F8F6FE] rounded-md p-4 ${height} border-2 border-[#AF93C8]`}>
           <div className="flex flex-col items-center w-full">
             <File className="h-16 w-16 text-[#AF93C8] mb-3" />
             <div className="w-full px-4 flex flex-col items-center">

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { ArrowRight, Upload, X, Loader } from "lucide-react";
 import FileUploadArea from "@/components/FileUploadArea";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 interface FileData {
   file: File | null;
@@ -180,10 +182,10 @@ const Index = () => {
                       <X className="h-4 w-4 mr-1" /> Clear
                     </Button>
                   </div>
-                  <div className="h-[316px] flex flex-col">
+                  <div className="h-[316px] flex flex-col border-2 border-[#AF93C8] rounded-md overflow-hidden">
                     <Textarea 
                       placeholder="Paste job description here..."
-                      className="w-full flex-grow border-[#E2DCF8] focus-visible:ring-[#AF93C8] resize-none overflow-auto"
+                      className="w-full flex-grow border-0 focus-visible:ring-0 resize-none overflow-auto"
                       value={jobDescription.content || ""}
                       onChange={handleJobTextChange}
                       disabled={isProcessing}
@@ -208,7 +210,10 @@ const Index = () => {
                     <div className="relative">
                       <Textarea 
                         placeholder="Paste job description here..."
-                        className="min-h-[150px] border-[#E2DCF8] focus-visible:ring-[#AF93C8]"
+                        className={cn(
+                          "min-h-[150px] border-2 focus-visible:ring-0 focus-visible:border-[#AF93C8]",
+                          hasJobText ? "border-[#AF93C8]" : "border-[#E2DCF8]"
+                        )}
                         value={jobDescription.content || ""}
                         onChange={handleJobTextChange}
                         disabled={isProcessing}
