@@ -1,9 +1,15 @@
-import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Download, Star } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import SuccessBanner from "@/components/results/SuccessBanner";
+import JobDescriptionPanel from "@/components/results/JobDescriptionPanel";
+import TailoredCVPanel from "@/components/results/TailoredCVPanel";
+import ImprovementsPanel from "@/components/results/ImprovementsPanel";
+import ScrollbarStyles from "@/components/results/ScrollbarStyles";
+
+// Mock data - would come from the context or API in a real app
 const mockJobDescription = `Sign in
 
 Find Jobs
@@ -109,70 +115,10 @@ const Results = () => {
 
   return (
     <div className="min-h-screen bg-[#F8F6FE] flex flex-col items-center px-4 py-4">
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          /* Custom scrollbar styles - only visible on scroll/hover */
-          .content-panel {
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: transparent transparent;
-          }
-          
-          .content-panel::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-            background-color: transparent;
-          }
-          
-          .content-panel::-webkit-scrollbar-track {
-            background: transparent;
-            border-radius: 4px;
-          }
-          
-          .content-panel::-webkit-scrollbar-thumb {
-            background: transparent;
-            border-radius: 4px;
-          }
-          
-          /* Show scrollbar on hover/scroll */
-          .content-panel:hover::-webkit-scrollbar-thumb,
-          .content-panel:focus::-webkit-scrollbar-thumb,
-          .content-panel:active::-webkit-scrollbar-thumb {
-            background: rgba(159, 135, 245, 0.5);
-          }
-          
-          .content-panel:hover::-webkit-scrollbar-track,
-          .content-panel:focus::-webkit-scrollbar-track,
-          .content-panel:active::-webkit-scrollbar-track {
-            background: rgba(226, 220, 248, 0.3);
-          }
-          
-          /* For Firefox */
-          .content-panel:hover,
-          .content-panel:focus-within,
-          .content-panel:active {
-            scrollbar-color: rgba(159, 135, 245, 0.5) rgba(226, 220, 248, 0.3);
-          }
-        `
-      }} />
+      <ScrollbarStyles />
+      
       <div className="w-full max-w-6xl">
-        {showBanner && (
-          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 py-2 px-4 mb-4 rounded flex items-start justify-between">
-            <div className="flex items-start">
-              <span className="flex-shrink-0 mr-2">✓</span>
-              <p className="text-sm">
-                <span className="font-bold">Success!</span> Your CV has been tailored to match the job description. You can now copy it into your own CV format for editing or start over.
-              </p>
-            </div>
-            <button 
-              className="text-green-500 hover:text-green-700" 
-              aria-label="Close"
-              onClick={handleCloseBanner}
-            >
-              <span className="text-xl">×</span>
-            </button>
-          </div>
-        )}
+        <SuccessBanner visible={showBanner} onClose={handleCloseBanner} />
         
         <div className="mb-4 flex items-center">
           <Button 
@@ -188,63 +134,13 @@ const Results = () => {
 
         {/* Main content - job description and tailored CV side by side */}
         <div className="grid md:grid-cols-2 gap-6 mb-6">
-          <Card className="border-[#E2DCF8] shadow-sm">
-            <CardHeader className="py-3 px-4">
-              <CardTitle className="text-[#3F2A51] text-xl">Job Description</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0 px-4 pb-4">
-              <div className="bg-white p-3 rounded-md h-[520px] overflow-y-auto whitespace-pre-line text-left text-sm content-panel">
-                {mockJobDescription}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-[#E2DCF8] shadow-sm">
-            <CardHeader className="py-3 px-4 flex flex-row items-center justify-between">
-              <CardTitle className="text-[#3F2A51] text-xl">Tailored CV</CardTitle>
-              <Button 
-                onClick={handleDownload}
-                className="bg-[#3F2A51] hover:bg-[#2A1C36] text-white"
-                size="sm"
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Download
-              </Button>
-            </CardHeader>
-            <CardContent className="pt-0 px-4 pb-4">
-              <div className="bg-white p-3 rounded-md h-[520px] overflow-y-auto whitespace-pre-line text-left text-sm content-panel">
-                {mockTailoredCV}
-              </div>
-            </CardContent>
-          </Card>
+          <JobDescriptionPanel content={mockJobDescription} />
+          <TailoredCVPanel content={mockTailoredCV} onDownload={handleDownload} />
         </div>
 
         {/* Improvements section at the bottom */}
         <div className="w-full">
-          <Card className="border-[#E2DCF8] shadow-sm">
-            <CardHeader className="py-3 px-4">
-              <CardTitle className="text-[#3F2A51] text-xl">Improvements</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0 px-4 pb-4">
-              <div className="bg-white p-3 rounded-md max-h-[280px] overflow-y-auto text-left content-panel">
-                {mockImprovements.map((improvement, index) => (
-                  <div key={index} className="mb-4">
-                    <h3 className="flex items-center text-[#3F2A51] font-semibold mb-1">
-                      <Star className="h-4 w-4 mr-2 text-[#AF93C8]" />
-                      {improvement.category}
-                    </h3>
-                    <ul className="list-disc pl-6 space-y-1">
-                      {improvement.items.map((item, itemIndex) => (
-                        <li key={itemIndex} className="text-sm text-gray-700">
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <ImprovementsPanel improvements={mockImprovements} />
         </div>
       </div>
     </div>
