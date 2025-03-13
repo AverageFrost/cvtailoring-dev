@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -97,5 +98,33 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Global scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(175, 147, 200, 0.2);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(175, 147, 200, 0.5);
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  /* For Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(175, 147, 200, 0.2) transparent;
   }
 }
