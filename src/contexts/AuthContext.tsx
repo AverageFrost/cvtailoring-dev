@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
@@ -107,7 +106,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       toast({
         title: "Account created",
-        description: "Please check your email for confirmation instructions.",
       });
       navigate("/auth"); // Return to sign-in
     } catch (error: any) {
