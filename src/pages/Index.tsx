@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -52,11 +51,6 @@ const Index = () => {
         }
         
         setCvFile({ file, filePath });
-        
-        toast({
-          title: "CV uploaded",
-          description: "Your CV has been uploaded successfully",
-        });
       } catch (error: any) {
         toast({
           title: "Upload failed",
@@ -69,10 +63,6 @@ const Index = () => {
     } else {
       // If not authenticated, just set the file locally
       setCvFile({ file });
-      toast({
-        title: "Sign in recommended",
-        description: "Sign in to save your CV and job descriptions",
-      });
     }
   };
 
@@ -101,11 +91,6 @@ const Index = () => {
         }
         
         setJobDescription({ file, filePath, content: "" });
-        
-        toast({
-          title: "Job description uploaded",
-          description: "Your job description has been uploaded successfully",
-        });
       } catch (error: any) {
         toast({
           title: "Upload failed",
@@ -118,10 +103,6 @@ const Index = () => {
     } else {
       // If not authenticated, just set the file locally
       setJobDescription({ file, content: "" });
-      toast({
-        title: "Sign in recommended",
-        description: "Sign in to save your CV and job descriptions",
-      });
     }
   };
 
