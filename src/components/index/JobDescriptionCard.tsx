@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,7 +11,7 @@ interface JobDescriptionCardProps {
   onRemoveFile: () => void;
   onTextChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onClearText: () => void;
-  file: File | null;
+  file: File | null | undefined;
   content: string;
   isProcessing: boolean;
   isUploading: boolean;

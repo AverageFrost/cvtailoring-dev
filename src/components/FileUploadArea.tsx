@@ -1,4 +1,3 @@
-
 import React, { useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
 import { File, X, Loader } from "lucide-react";
@@ -8,7 +7,7 @@ import { Button } from "@/components/ui/button";
 interface FileUploadAreaProps {
   onFileUpload: (file: File) => void;
   onRemoveFile: () => void;
-  file: File | null;
+  file: File | null | undefined;
   acceptedTypes: string;
   uploadText: string;
   acceptedTypesText: string;

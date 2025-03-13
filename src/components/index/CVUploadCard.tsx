@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Upload, Loader } from "lucide-react";
@@ -7,7 +6,7 @@ import FileUploadArea from "@/components/FileUploadArea";
 interface CVUploadCardProps {
   onFileUpload: (file: File) => void;
   onRemoveFile: () => void;
-  file: File | null;
+  file: File | null | undefined;
   isProcessing: boolean;
   isUploading: boolean;
   isExistingFile?: boolean;
