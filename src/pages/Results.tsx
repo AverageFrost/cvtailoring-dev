@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Download, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "@/hooks/use-toast";
 
 const mockJobDescription = `Sign in
 
@@ -81,10 +80,24 @@ const Results = () => {
   const [showBanner, setShowBanner] = useState(true);
 
   const handleDownload = () => {
-    toast({
-      title: "Download started",
-      description: "Your tailored CV is being downloaded as a DOCX file.",
-    });
+    // Create a Blob from the CV text
+    const blob = new Blob([mockTailoredCV], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    
+    // Create a download link
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'Tailored_CV.docx'; // Set the filename
+    
+    // Append to the document, click to trigger download, then remove
+    document.body.appendChild(link);
+    link.click();
+    
+    // Clean up
+    setTimeout(() => {
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }, 100);
   };
 
   const handleGoBack = () => {
