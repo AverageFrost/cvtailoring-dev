@@ -99,33 +99,47 @@ const Results = () => {
 
   return (
     <div className="min-h-screen bg-[#F8F6FE] flex flex-col items-center px-4 py-8">
-      <style jsx global>{`
-        /* Custom scrollbar styles */
-        ::-webkit-scrollbar {
-          width: 8px;
-          height: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-          background: #E2DCF8;
-          border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-          background: #9b87f5;
-          border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-          background: #7E69AB;
-        }
-        
-        /* Firefox scrollbar */
-        * {
-          scrollbar-width: thin;
-          scrollbar-color: #9b87f5 #E2DCF8;
-        }
-      `}</style>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          /* Custom scrollbar styles - only visible on scroll */
+          .content-panel {
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(159, 135, 245, 0.5) rgba(226, 220, 248, 0.3);
+          }
+          
+          .content-panel::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+            background-color: transparent;
+          }
+          
+          .content-panel::-webkit-scrollbar-track {
+            background: rgba(226, 220, 248, 0.3);
+            border-radius: 4px;
+          }
+          
+          .content-panel::-webkit-scrollbar-thumb {
+            background: rgba(159, 135, 245, 0.5);
+            border-radius: 4px;
+          }
+          
+          .content-panel::-webkit-scrollbar-thumb:hover {
+            background: rgba(126, 105, 171, 0.7);
+          }
+          
+          /* Hide scrollbar until hover/scroll */
+          .content-panel::-webkit-scrollbar-thumb {
+            visibility: hidden;
+          }
+          
+          .content-panel:hover::-webkit-scrollbar-thumb,
+          .content-panel:focus::-webkit-scrollbar-thumb,
+          .content-panel:active::-webkit-scrollbar-thumb {
+            visibility: visible;
+          }
+        `
+      }} />
       <div className="w-full max-w-6xl">
         {/* Success Message */}
         {showBanner && (
@@ -169,7 +183,7 @@ const Results = () => {
               <CardTitle className="text-[#3F2A51]">Job Description</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="bg-white p-4 rounded-md h-[500px] overflow-y-auto whitespace-pre-line text-left text-sm">
+              <div className="bg-white p-4 rounded-md h-[500px] overflow-y-auto whitespace-pre-line text-left text-sm content-panel">
                 {mockJobDescription}
               </div>
             </CardContent>
@@ -188,7 +202,7 @@ const Results = () => {
               </Button>
             </CardHeader>
             <CardContent>
-              <div className="bg-white p-4 rounded-md h-[500px] overflow-y-auto whitespace-pre-line text-left text-sm">
+              <div className="bg-white p-4 rounded-md h-[500px] overflow-y-auto whitespace-pre-line text-left text-sm content-panel">
                 {mockTailoredCV}
               </div>
             </CardContent>
@@ -200,7 +214,7 @@ const Results = () => {
               <CardTitle className="text-[#3F2A51]">Improvements</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="bg-white p-4 rounded-md h-[500px] overflow-y-auto text-left">
+              <div className="bg-white p-4 rounded-md h-[500px] overflow-y-auto text-left content-panel">
                 {mockImprovements.map((improvement, index) => (
                   <div key={index} className="mb-6">
                     <h3 className="flex items-center text-[#3F2A51] font-semibold mb-2">
