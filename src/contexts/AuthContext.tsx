@@ -73,7 +73,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, fullName: string) => {
     try {
-      const { error } = await supabase.auth.signUp({ 
+      // First, sign up the user with Supabase Auth
+      const { error, data } = await supabase.auth.signUp({ 
         email, 
         password,
         options: {
@@ -90,6 +91,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           variant: "destructive",
         });
         return;
+      }
+      
+      // If signup successful, update the profile directly
+      if (data.user) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .update({ full_name: fullName })
+          .eq('id', data.user.id);
+        
+        if (profileError) {
+          console.error("Error updating profile:", profileError);
+        }
       }
       
       toast({

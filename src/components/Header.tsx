@@ -3,10 +3,12 @@ import React from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { LogOut, LogIn, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
   const { user, signOut } = useAuth();
+  const location = useLocation();
+  const isAuthPage = location.pathname === "/auth";
 
   return (
     <header className="w-full py-3 px-4 absolute top-0 z-10">
@@ -31,17 +33,19 @@ const Header = () => {
               </Button>
             </div>
           ) : (
-            <Button 
-              variant="outline" 
-              size="sm"
-              asChild
-              className="text-[#3F2A51] border-[#3F2A51] hover:bg-[#3F2A51]/10"
-            >
-              <Link to="/auth">
-                <LogIn className="h-4 w-4 mr-1" />
-                Sign In
-              </Link>
-            </Button>
+            !isAuthPage && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                asChild
+                className="text-[#3F2A51] border-[#3F2A51] hover:bg-[#3F2A51]/10"
+              >
+                <Link to="/auth">
+                  <LogIn className="h-4 w-4 mr-1" />
+                  Sign In
+                </Link>
+              </Button>
+            )
           )}
         </div>
       </div>

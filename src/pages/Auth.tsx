@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -47,15 +46,6 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-[#F8F6FE] flex flex-col items-center px-4 py-16">
       <div className="w-full max-w-md">
-        <Button 
-          onClick={() => navigate("/")} 
-          variant="ghost" 
-          className="mb-6 text-[#3F2A51] hover:bg-[#E2DCF8] hover:text-[#3F2A51]"
-        >
-          <ArrowLeft className="h-5 w-5 mr-2" />
-          Back to Home
-        </Button>
-        
         <Card className="border-[#E2DCF8] shadow-sm">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold text-[#3F2A51]">CV Tailor</CardTitle>
