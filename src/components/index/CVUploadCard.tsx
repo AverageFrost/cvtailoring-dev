@@ -38,7 +38,7 @@ const CVUploadCard: React.FC<CVUploadCardProps> = ({
           height="h-[350px]"
           isProcessing={isProcessing}
           isUploading={isUploading}
-          isExistingFile={Boolean(isExistingFile)}
+          isExistingFile={isExistingFile}
         />
       </CardContent>
     </Card>
