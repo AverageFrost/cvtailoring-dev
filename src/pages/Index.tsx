@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,7 @@ interface FileData {
   file: File | null;
   content?: string;
   filePath?: string;
+  isExistingFile?: boolean;
 }
 
 const Index = () => {
@@ -28,15 +28,12 @@ const Index = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   
-  // Check if any upload is in progress
   const isUploading = isCvUploading || isJobUploading;
   
-  // Load previously uploaded CV if user is authenticated
   useEffect(() => {
     const loadPreviousCV = async () => {
       if (user) {
         try {
-          // List files from user's CV folder
           const { data, error } = await supabase.storage
             .from('user_files')
             .list(`${user.id}/cv`, {
@@ -48,12 +45,10 @@ const Index = () => {
             throw error;
           }
           
-          // If there's a previously uploaded CV, fetch it
           if (data && data.length > 0) {
             const latestFile = data[0];
             const filePath = `${user.id}/cv/${latestFile.name}`;
             
-            // Get URL for the file
             const { data: fileData, error: fileError } = await supabase.storage
               .from('user_files')
               .download(filePath);
@@ -62,16 +57,13 @@ const Index = () => {
               throw fileError;
             }
             
-            // Create a File object
-            if (fileData) {
-              const file = new File(
-                [fileData], 
-                latestFile.name, 
-                { type: fileData.type }
-              );
-              
-              setCvFile({ file, filePath });
-            }
+            const file = new File(
+              [fileData], 
+              latestFile.name, 
+              { type: fileData.type }
+            );
+            
+            setCvFile({ file, filePath, isExistingFile: true });
           }
         } catch (error: any) {
           console.error("Error loading previous CV:", error.message);
@@ -96,7 +88,6 @@ const Index = () => {
     if (user) {
       setIsCvUploading(true);
       try {
-        // Upload the file to Supabase storage
         const filePath = `${user.id}/cv/${Date.now()}_${file.name}`;
         const { error } = await supabase.storage
           .from('user_files')
@@ -106,7 +97,7 @@ const Index = () => {
           throw error;
         }
         
-        setCvFile({ file, filePath });
+        setCvFile({ file, filePath, isExistingFile: false });
       } catch (error: any) {
         toast({
           title: "Upload failed",
@@ -117,7 +108,6 @@ const Index = () => {
         setIsCvUploading(false);
       }
     } else {
-      // If not authenticated, just set the file locally
       setCvFile({ file });
     }
   };
@@ -136,7 +126,6 @@ const Index = () => {
     if (user) {
       setIsJobUploading(true);
       try {
-        // Upload the file to Supabase storage
         const filePath = `${user.id}/job/${Date.now()}_${file.name}`;
         const { error } = await supabase.storage
           .from('user_files')
@@ -157,7 +146,6 @@ const Index = () => {
         setIsJobUploading(false);
       }
     } else {
-      // If not authenticated, just set the file locally
       setJobDescription({ file, content: "" });
     }
   };
@@ -168,8 +156,7 @@ const Index = () => {
 
   const handleRemoveCv = async () => {
     if (!isProcessing && !isCvUploading) {
-      // If the file was uploaded to Supabase, remove it from storage
-      if (user && cvFile.filePath) {
+      if (user && cvFile.filePath && !cvFile.isExistingFile) {
         try {
           const { error } = await supabase.storage
             .from('user_files')
@@ -189,7 +176,6 @@ const Index = () => {
 
   const handleRemoveJobFile = async () => {
     if (!isProcessing && !isJobUploading) {
-      // If the file was uploaded to Supabase, remove it from storage
       if (user && jobDescription.filePath) {
         try {
           const { error } = await supabase.storage
@@ -289,6 +275,7 @@ const Index = () => {
                 height="h-[350px]"
                 isProcessing={isProcessing}
                 isUploading={isCvUploading}
+                isExistingFile={cvFile.isExistingFile}
               />
             </CardContent>
           </Card>

@@ -16,6 +16,7 @@ interface FileUploadAreaProps {
   height?: string;
   isProcessing?: boolean;
   isUploading?: boolean;
+  isExistingFile?: boolean; // New prop to indicate if file is from storage
 }
 
 const FileUploadArea: React.FC<FileUploadAreaProps> = ({
@@ -29,6 +30,7 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
   height = "h-[150px]",
   isProcessing = false,
   isUploading = false,
+  isExistingFile = false, // Default to false
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const { toast } = useToast();
@@ -139,6 +141,7 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
               </p>
               <p className="text-sm text-[#AF93C8] mt-1 mb-4">
                 {formatFileSize(file.size)}
+                {isExistingFile && " (Previously Uploaded)"}
               </p>
             </div>
             
